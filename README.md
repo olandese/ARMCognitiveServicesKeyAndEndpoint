@@ -2,7 +2,7 @@
 
 See my blog post: https://blog.olandese.nl/2017/09/20/get-cognitive-services-keys-and-endpoint-in-an-arm-template/
 
-## Option 1: Deploy directly from the portal
+## Deploy directly from the portal
 
 1. Click this button (hold CTRL while clicking to open in a new tab):
 
