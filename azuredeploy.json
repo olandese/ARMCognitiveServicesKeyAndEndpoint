@@ -1,0 +1,62 @@
+﻿{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+  },
+  "variables": {
+    "name":  "Test",
+    "cognitiveservicesid": "[concat(resourceGroup().id,'/providers/','Microsoft.CognitiveServices/accounts/', variables('name'))]"
+  },
+  "resources": [
+    {
+      "type": "MICROSOFT.WEB/CONNECTIONS",
+      "apiVersion": "2016-06-01",
+      "name": "[variables('name')]",
+      "location": "westeurope",
+      "properties": {
+        "api": {
+          "id": "[concat(subscription().id, '/providers/Microsoft.Web/locations/', 'westeurope', '/managedApis/', 'cognitiveservicescomputervision')]"
+        },
+        "displayName": "[variables('name')]",
+        "parameterValues": {
+          "siteUrl": "[reference(variables('cognitiveservicesid'),'2016-02-01-preview').endpoint]",
+          "apiKey": "[listKeys(variables('cognitiveservicesid'),'2016-02-01-preview').key1]"
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.CognitiveServices/accounts', variables('name'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.CognitiveServices/accounts",
+      "sku": {
+        "name": "S1"
+      },
+      "kind": "ComputerVision",
+      "name": "[variables('name')]",
+      "apiVersion": "2016-02-01-preview",
+      "location": "westeurope",
+      "scale": null,
+      "properties": {},
+      "dependsOn": []
+    }
+  ],
+  "outputs": {
+    "cognitivekeys": {
+      "type": "object",
+      "value": "[listKeys(variables('cognitiveservicesid'),'2016-02-01-preview')]"
+    },
+    "cognitivekey1": {
+      "type": "string",
+      "value": "[listKeys(variables('cognitiveservicesid'),'2016-02-01-preview').key1]"
+    },
+    "cognitivekey2": {
+      "type": "string",
+      "value": "[listKeys(variables('cognitiveservicesid'),'2016-02-01-preview').key2]"
+    },
+    "endpoint": {
+      "type": "string",
+      "value": "[reference(variables('cognitiveservicesid'),'2016-02-01-preview').endpoint]"
+    }
+  }
+}

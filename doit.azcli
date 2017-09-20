@@ -1,0 +1,3 @@
+az login
+az group create -n "Test"
+az group deployment create -g Test --template-file azuredeploy.json
